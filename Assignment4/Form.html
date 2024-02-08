@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>Feedback</title>
+  <style>
+    label {	float: left;
+			width: 150px;}
+      #container{
+          width: 1300px;
+          margin: auto;
+          background-color: beige;
+      } 
+      main{
+          padding: 50px;
+      }
+	  table, th, tr,td{
+		margin: 10px;
+		padding: 10px;
+		border: solid 1px black;
+	  }
+  </style>
+ </head>
+ <body>
+ <div id="container">
+	 
+	 <main>
+	 <h2>Feeback</h2>
+	 <h3>Love something? Hate something? Let us know!</h3>
+		 Note : Fields marked with an asterisk(*) are mandatory
+		 <br><br>
+		 <form method="post" id="myForm" action="/Form">
+			<label>Title*:</label>
+			<input type="radio" name="title" id="miss" value="miss" required="required"/>Miss
+			<input type="radio" name="title" id="mr" value="mr" required="required"/>Mr.
+			<input type="radio" name="title" id="mrs" value="mrs" required="required"/>Mrs.
+			<br><br>
+			<label for="firstName">First Name*:</label>
+			<input type="text" name="firstName" id="firstName" placeholder="First Name" required="required" minlength="5" maxlength="15" onblur="validateFirstName()"/>	
+			<p id="error_firstName" style="display: none; color: red; ">
+				Invalid input for the First Name field. Only text are allowed.
+				
+			</p>
+			<p id="error_firstName_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+			
+
+			<label for="lastName">Last Name*:</label>
+			<input type="text" name="lastName" id="lastName" placeholder="Last Name" required="required" minlength="5" maxlength="15" onblur="validateLastName()"/>
+			<p id="error_lastName" style="display: none; color: red; ">
+				Invalid input for the Last Name field. Only text are allowed.
+				
+			</p>
+			<p id="error_lastName_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+			
+
+			<label for="emailId">Email Id*:</label>
+			<input type="text" name="emailId" id="emailId" placeholder="yourname@domain.com" required="required" minlength="5" maxlength="30" onblur="validateEmail()"/>
+			<p id="error_emailId" style="display: none; color: red; ">
+				Invalid input for the email Id Field. please use northeastern.edu domain.
+				
+			</p>
+			<p id="error_emailId_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+			
+
+			<label for="phoneNumber">Phone Number*:</label>
+			<input type="text" name="phoneNumber" id="phoneNumber" placeholder="xxx-xxx-xxxx" required="required" minlength="12" maxlength="12" onblur="validatePhoneNumber()"/>
+			<p id="error_phoneNumber" style="display: none; color: red; ">
+				Invalid input for the PhoneNumber field. Only Digits are allowed.	<br>
+				Please use xxx-xxx-xxxx format.			
+			</p>
+			<p id="error_phoneNumber_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+
+			<label for="streetAddress1">Street Address 1*:</label>
+			<input type="text" name="streetAddress1" id="streetAddress1" placeholder="address" required="required" minlength="5" maxlength="30" onblur="validateAddress1()"/>
+			<p id="error_streetAddress1" style="display: none; color: red; ">
+				Invalid input for the Address field. Only text, digits, comma(,) and hyphen(-) are allowed.
+				
+			</p>
+			<p id="error_streetAddress1_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+
+			<label for="streetAddress2">Street Address 2:</label>
+			<input type="text" name="streetAddress2" id="streetAddress2" placeholder="address" minlength="5" maxlength="30" onblur="validateAddress2()"/>
+			<p id="error_streetAddress2" style="display: none; color: red; ">
+				Invalid input for the Address field. Only text, digits, comma(,) and hyphen(-) are allowed.
+				
+			</p>
+			<br><br>
+
+			<label for="city">City*:</label>
+			<input type="text" name="city" id="city" placeholder="city" required="required" minlength="5" maxlength="15" onblur="validateCity()"/>
+			<p id="error_city" style="display: none; color: red; ">
+				Invalid input for the City field. Only text are allowed.
+				
+			</p>
+			<p id="error_city_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+
+			<label for="state">State*:</label>
+			<input type="text" name="state" id="state" placeholder="state"  required="required" minlength="6" maxlength="15" onblur="validateState()"/>
+			<p id="error_state" style="display: none; color: red; ">
+				Invalid input for the State field. Only text are allowed.
+				
+			</p>
+			<p id="error_state_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			
+			<br><br>
+			
+            <label for="zipcode">ZipCode*:</label>
+			<input type="text" name="zipcode" id="zipcode" placeholder="xxxxxx" required="required" minlength="6" maxlength="6" onblur="validateZipcode()"/>
+			<p id="error_zipcode" style="display: none; color: red; ">
+				Invalid input for the Zipcode field. Only digits are allowed.
+				
+			</p>
+			<p id="error_zipcode_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+
+			<label for="order">Choose a Order:</label>
+			<select name="order" id="order">
+			  <option value="none" >Select item</option>
+			  <option value="hot_coffee">Hot Coffee</option>
+			  <option value="pizza">Pizza</option>
+			  <option value="burger">Burger</option>
+			  <option value="cold_drink">Cold Drinks</option>
+			  <option value="sandwich">Sandwiches</option>
+			</select>
+			<p id="error_order_req" style="display: none; color: red; ">
+			  Please Select Your Order.
+		  </p>
+		  <div id="dynamic_check">
+			  <div class="child">
+
+			  </div>
+			  
+		  </div>
+		  <p id="error_dynamic_check_req" style="display: none; color: red; ">
+			  Please fill this field.
+		  </p>
+<br><br>
+			<div id="text_field" style="display: none;">
+			<label for="thoughts">Any additional customizations?*:</label>
+			<input name="text" type= "text" name="thoughts" id="thoughts" placeholder="Your Thoughts" rows="5" cols="25" onblur="validateThoughts()">
+			
+		  <p id="error_thoughts_req" style="display: none; color: red; ">
+			  Please fill this field.
+		  </p>
+		   <br><br>
+		  </div>
+             
+            <label for="zipcode">How did you hear*:</label>
+			<input type='checkbox' name="source" value="facebook"/> Facebook
+            <input type='checkbox' name="source" value="google"/> Google
+            <input type='checkbox' name="source" value="yelp"/> Yelp 
+			<p id="error_source_req" style="display: none; color: red; ">
+				Please Select atleast one.
+			</p>
+			<br><br> 
+             
+			<label for="comments">Comments*:</label>
+			<textarea name="text" id="comments" placeholder="Your comments" rows="5" cols="25" required="required" onblur="validateComments(),validateForm()"></textarea>
+			<p id="error_comments_req" style="display: none; color: red; ">
+				Please fill this field.
+			</p>
+			<br><br>
+			<input type="Submit" id="submit" disabled>
+			<input type="Reset">
+			<br><br>
+		 </form>
+	 </main>
+
+	 <table id="myTable" hidden>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Email</th>
+		<th>Phone Number</th>
+		<th>Street Address 1</th>
+		<th>Street Address 2</th>
+		<th>City</th>
+		<th>State</th>
+		<th>ZipCode</th>
+		<th hidden>Order</th>
+		<th hidden>Thoughts</th>
+		<th>How did you hear</th>
+		<th>Comments</th>
+	 </table>
+ </div>
+
+ <script src="script.js"></script>
+
+ </body>
+</html>
