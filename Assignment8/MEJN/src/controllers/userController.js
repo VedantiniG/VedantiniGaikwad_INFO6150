@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 import { userSchema } from '../models/userSchema';
 import { passwordHashing } from './encryptPassword';
 const { UserExistsError, UserDoesNotExistError } = require('../errors/errorHandling');
+const path = require('path');
 
 const User = mongoose.model('User', userSchema);
 
@@ -55,25 +56,28 @@ export const deleteUser = async (email) => {
 
 export const uploadImage = async (req, res) => {
     try {
-        if (!req.file || !req.body.userId) {
+        if (!req.file || !req.body.email) {
             fs.unlink(`images/${req.file.originalname}`);
-            return res.status(400).json({ message: 'Missing image file or user ID' });
+            return res.status(400).json({ message: 'Missing image file or email' });
         }
 
-        const email = req.body.userId
+        const email = req.body.email
 
         if (!await User.findOne({ email })) {
+            console.log("couldn't find user");
             fs.unlink(`images/${req.file.originalname}`)
             return res.status(404).json({
                 message: 'User not found'
             });
         }
 
+        console.log(path.basename(req.file.originalname));
+
         const fileNameWithoutExtension = path.basename(req.file.originalname, path.extname(req.file.originalname));
         const extension = path.extname(req.file.originalname);
 
-        const imagePath = `images/${req.body.userId}/${fileNameWithoutExtension}_${Date.now()}${extension}`;
-        fs.move(`images${req.file.originalname}, imagePath, { overwrite: true }`)
+        const imagePath = `images/${req.body.email}/${fileNameWithoutExtension}_${Date.now()}${extension}`;
+        //fs.move(`images${req.file.originalname}, imagePath, { overwrite: true }`)
 
         await User.updateOne({ email: email }, { $push: { 'imagePaths': imagePath } })
 

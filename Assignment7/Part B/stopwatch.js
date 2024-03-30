@@ -41,6 +41,7 @@ $(document).ready(() => {
   $("#date-picker").datepicker({
     changeMonth: true,
     changeYear: true,
+    maxDate: 0,
   });
 
   const currentDate = new Date();
