@@ -17,6 +17,13 @@ const isValidEmail = (email) => {
     return testRegex(/([\w\.]+)@northeastern\.edu/, email)
 };
 
+const isValidType = (type) => {
+    if(type !== 'employee' || type !== 'admin'){
+        return false;
+    }
+    return true;
+}
+
 const validateEmailField = (email) => {
     if (email == null) {
         throw new ValidationError("Email required");
@@ -53,8 +60,18 @@ const validatePasswordField = (password) => {
     }
 };
 
-export const validateUserFields = (email, name, password) => {
+const validateTypeField = (type) => {
+    if (type == null) {
+        throw new ValidationError("Type is required");
+    }
+    if (isValidType(type)) {
+        throw new ValidationError("Not a valid type");
+    }
+};
+
+export const validateUserFields = (email, name, password, type) => {
     validateEmailField(email)
     validateNameField(name)
     validatePasswordField(password)
+    validateTypeField(type)
 };

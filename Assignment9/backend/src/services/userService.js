@@ -3,19 +3,21 @@ import { userSchema } from '../models/userSchema';
 import { UserAlreadyExists, UserDoesNotExist, ValidationError } from '../errors/errorHandling';
 import { validateUserFields, isValidName, isValidPassword } from './validationService';
 import { passwordHashing, comparePassword } from './encryptPassword';
+const path = require("path");
+var fs = require("fs-extra");
 
 const User = mongoose.model('User', userSchema);
 var jwt = require('jsonwebtoken');
 
 export const getUsers = async () => {
-    return await User.find();
+    return await User.find().select("-password");
 };
 
-export const createNewUser = async (email, name, password) => {
+export const createNewUser = async (email, name, password, type) => {
 
-    validateUserFields(email, name, password)
+    validateUserFields(email, name, password, type)
 
-    const hashedPassword = passwordHashing(password);
+    const hashedPassword = await passwordHashing(password);
     
     const userExists = await User.findOne({ email: email });
     if(userExists != null) {
@@ -24,7 +26,8 @@ export const createNewUser = async (email, name, password) => {
     let user = new User({
         fullname: name,
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
+        type: type
     });
     let newUser = await user.save();
     return newUser;
@@ -64,6 +67,86 @@ export const deleteUserByEmail = async (email) => {
     await User.findOneAndDelete({ email: email });
 }
 
+export const uploadImages = async (file, email) => {
+    if (!file || !email) {
+        if (file) {
+          fs.unlink(
+            `../frontend/public/user_images/${req.file.originalname}`
+          );
+        }
+        throw new ValidationError("Missing image file or email");
+    }
+
+    if (!(await User.findOne({ email: email }))) {
+        fs.unlink(
+          `../frontend/public/user_images/${file.originalname}`
+        );
+        throw new UserDoesNotExist();
+    }
+
+    const fileNameWithoutExtension = path.basename(
+        file.originalname,
+        path.extname(file.originalname)
+    );
+
+    const extension = path.extname(file.originalname);
+
+    const imagePath = `../frontend/public/user_images/${
+        email
+    }/${fileNameWithoutExtension}_${Date.now()}${extension}`;
+
+    fs.move(
+        `../frontend/public/user_images/${file.originalname}`,
+        imagePath,
+        {
+          overwrite: true,
+        }
+    );
+
+    const relativePath = `public/user_images/${
+        email
+    }/${fileNameWithoutExtension}_${Date.now()}${extension}`;
+
+    await User.updateOne(
+        { email: email },
+        {
+          $push: {
+            imagePaths: relativePath,
+          },
+        }
+    );
+
+}
+
+export const getAllImages = async () => {
+    function readImageFiles(dirPath, fileList) {
+        const files = fs.readdirSync(dirPath);
+  
+        files.forEach((file) => {
+          const filePath = path.join(dirPath, file);
+          const stat = fs.statSync(filePath);
+  
+          if (stat.isDirectory()) {
+            readImageFiles(filePath, fileList); // Recursively traverse subdirectories
+          } else if (/\.(jpg|jpeg|png|gif)$/i.test(filePath)) {
+            fileList.push(filePath);
+          }
+        });
+      }
+  
+      const imagesDir = path.join(
+        __dirname,
+        "../../../frontend/public/user_images"
+      );
+  
+      const imagePaths = [];
+      readImageFiles(imagesDir, imagePaths);
+      const modifiedPaths = imagePaths.map((path) =>
+        path.replace(/^.*public\\/, "")
+      );
+      return modifiedPaths;
+}
+
 export const authenticateAndLogin = async (email, password) => {
     let userExists = await User.findOne({ email: email });
     if(userExists == null) {
@@ -81,4 +164,13 @@ export const authenticateAndLogin = async (email, password) => {
         { expiresIn: "3h" }
       );
       return token;
+}
+
+export const getUserType = async (email) => {
+    let userExists = await User.findOne({ email: email });
+    if(userExists == null) {
+        throw new UserDoesNotExist();
+    }
+    console.log(userExists.type)
+    return userExists.type;
 }

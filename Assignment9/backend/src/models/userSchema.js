@@ -13,5 +13,9 @@ export const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: 'Enter your password'
+    },
+    type: {
+        type: String,
+        required: 'Enter user type'
     }
 });

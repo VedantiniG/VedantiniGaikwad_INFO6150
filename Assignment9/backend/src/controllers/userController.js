@@ -1,4 +1,13 @@
-import { getUsers, createNewUser, deleteUserByEmail, editUser, authenticateAndLogin } from "../services/userService";
+import { 
+    getUsers, 
+    createNewUser, 
+    deleteUserByEmail, 
+    editUser, 
+    authenticateAndLogin, 
+    getUserType,
+    uploadImages,
+    getAllImages 
+} from "../services/userService";
 
 export const getAllUsers = async (req, res, next) => {
     try {
@@ -18,10 +27,11 @@ export const createUser = async (req, res) => {
     const email = req.body.email;
     const name = req.body.fullname;
     const password = req.body.password;
+    const type = req.body.type;
 
     try {
 
-        const user = await createNewUser(email, name, password);
+        const user = await createNewUser(email, name, password, type);
         res.status(201).send(user);
 
     } catch(error) {
@@ -91,10 +101,49 @@ export const deleteUser = async (req, res) => {
         }
     }
 };
+  
+export const uploadImage = async (req, res) => {
 
-export const uploadImage = (req, res) => {
+    const file = req.file;
+    const email = req.body.email;
 
-}
+    try{
+
+        await uploadImages(file, email);
+        res.status(200).json({message: 'Image uploaded successfully'});
+
+    } catch (error) {
+        
+        if( error.name === "UserDoesNotExist") {
+
+            return res.status(404).json({ message: error.message });
+
+        } else if ( error.name === "ValidationError" ){
+
+            res.status(400).json({ message: error.message });
+
+        } else {
+
+            res.status(500).json({ message: "Internal server error" });
+
+        }
+    }
+};
+
+export const getImages = async (req, res) => {
+
+    try {
+
+        const modifiedPaths = await getAllImages();
+        res.json(modifiedPaths);
+
+    } catch (error) {
+
+        res.status(500).json({ message: "Internal server error" });
+
+    }
+
+};
 
 export const loginUser = async (req, res) => {
     try {
@@ -102,7 +151,8 @@ export const loginUser = async (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
         const authenticatedUser = await authenticateAndLogin(email, password);
-        res.status(200).send({email: email, token: authenticatedUser});
+        const userType = await getUserType(email);
+        res.status(200).send({email: email, token: authenticatedUser, type: userType});
 
     } catch ( error ) {
 
@@ -121,4 +171,4 @@ export const loginUser = async (req, res) => {
         }
 
     }
-}
+};

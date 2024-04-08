@@ -25,8 +25,28 @@ class UserDoesNotExist extends Error {
     }
 }
 
+class JobDoesNotExist extends Error {
+    get message() {
+        return "Job does not exist :/";
+    }
+    get name() {
+        return "JobDoesNotExist";
+    }
+}
+
+class JobAlreadyExists extends Error {
+    get message() {
+        return "Job already exist :/";
+    }
+    get name() {
+        return "JobAlreadyExists";
+    }
+}
+
 module.exports = {
     UserAlreadyExists,
     ValidationError,
-    UserDoesNotExist
+    UserDoesNotExist,
+    JobDoesNotExist,
+    JobAlreadyExists
 }
