@@ -10,6 +10,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import AdminNavigationBar from '../components/NavBar/AdminNavigationBar';
 import Footer from '../components/Footer/Footer';
+import { Form } from "react-bootstrap";
 
 export default () => {
 
@@ -26,20 +27,16 @@ export default () => {
             description: description,
             salary: salary
         });
+        document.getElementById('addJob').submit();
         console.log(response);
-        this.setState({
-            companyname: "",
-            jobtitle: "",
-            description: "",
-            salary: ""
-        })
     }
 
     return (
         <>
             <AdminNavigationBar name="Add Job Posts"/>
+            <form onSubmit={handleSubmit} id='addJob'>
                 <TableContainer component={Paper} sx={{  flexGrow: 1, maxWidth: 752, backgroundColor:'#F3FFFF' }}>
-                    <Table sx={{ minWidth: 550 }} aria-label="simple table">
+                    <Table sx={{ minWidth: 300 }} aria-label="simple table">
                         <TableHead>
                             <TableRow sx={{ "& td": { border: 0 } }}>
                                 <TableCell align="center" colSpan={2}>
@@ -99,7 +96,7 @@ export default () => {
                                         <Button 
                                             variant="outlined" 
                                             style={{ color:'black', borderBlockColor: 'black' }}
-                                            onClick={(e) => handleSubmit(e)}
+                                            onClick={handleSubmit}
                                         >
                                             Submit
                                         </Button>
@@ -108,7 +105,8 @@ export default () => {
                                 <TableRow><TableCell></TableCell></TableRow>
                             </TableBody>
                     </Table>
-                </TableContainer>            
+                </TableContainer>  
+                </form>          
             <Footer/>
         </>
     )

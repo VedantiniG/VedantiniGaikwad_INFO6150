@@ -7,9 +7,9 @@ import {
   const token = localStorage.getItem("token");
   const type = localStorage.getItem("type");
   
-  const initialState = token && type
-    ? { isLoggedIn: true, token  }
-    : { isLoggedIn: false, token: null };
+  const initialState = token
+    ? { isLoggedIn: true, token, type  }
+    : { isLoggedIn: false, token: null, type: null };
   
   export default function (state = initialState, action) {
     const { type, payload } = action;
@@ -19,19 +19,22 @@ import {
         return {
           ...state,
           isLoggedIn: true,
-          user: payload.user,
+          token: payload.token,
+          type: payload.type,
         };
       case LOGIN_FAIL:
         return {
           ...state,
           isLoggedIn: false,
-          user: null,
+          token: null,
+          type: null,
         };
       case LOGOUT:
         return {
           ...state,
           isLoggedIn: false,
-          user: null,
+          token: null,
+          type: null,
         };
       default:
         return state;

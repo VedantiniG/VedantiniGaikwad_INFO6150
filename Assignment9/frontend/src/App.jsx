@@ -17,6 +17,7 @@ function App() {
 
   return (
     <>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <Routes>
               <Route exact path="/" element={<Login/>} />
               <Route element={<ProtectedRouted allowedRoles={["employee"]}/>}>

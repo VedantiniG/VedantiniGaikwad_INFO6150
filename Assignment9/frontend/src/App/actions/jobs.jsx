@@ -1,20 +1,21 @@
 import {
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOGOUT,
+    CREATE_JOB_SUCCESS,
+    CREATE_JOB_FAIL,
     SET_MESSAGE
 } from './type';
 
-import authService from '../services/auth.service';
+import jobService from '../services/job.service';
 
-export const login = (email, password) => (dispatch) => {
-    return authService.login(email, password).then(
+export const createJobPost = (companyname, jobtitle, description, salary) => (dispatch) => {
+    jobService.createJobPost(companyname, jobtitle, description, salary). then(
         (data) => {
             dispatch({
-                type: LOGIN_SUCCESS,
+                type: CREATE_JOB_SUCCESS,
                 payload: {
-                    token: data.token,
-                    type: data.type,
+                    companyname: data.companyname,
+                    jobtitle: data.jobtitle,
+                    description: data.description,
+                    salary: data.salary,
                 }
             });
             return Promise.resolve();
@@ -28,7 +29,7 @@ export const login = (email, password) => (dispatch) => {
             error.toString();
 
             dispatch({
-                type: LOGIN_FAIL,
+                type: CREATE_JOB_FAIL,
             });
 
             dispatch({
@@ -38,15 +39,5 @@ export const login = (email, password) => (dispatch) => {
 
             return Promise.reject();
         }
-    );
-};
-
-export const logout = () => (dispatch) => {
-    authService.logout();
-  
-    dispatch({
-      type: LOGOUT,
-    });
-
-    return Promise.resolve();
-};
+    )
+}

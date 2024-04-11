@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 export default () => {
     return (
@@ -6,11 +6,17 @@ export default () => {
             className="fixed-bottom"
             sx={{
                 bgcolor:  '#57c7cb',
-                width: `100%`,
+                width: 'auto',
                 color: 'aliceblue',
             }}
         >
-            © 2024 Jobify All Rights Reserved
+            <Grid container justifyContent="center">
+                <Grid item xs={12} sm={6} md={4}>
+                    <Typography align="center" variant="body1">
+                        © 2024 Jobify All Rights Reserved
+                    </Typography>
+                </Grid>
+            </Grid>
         </Box>
     );
 }

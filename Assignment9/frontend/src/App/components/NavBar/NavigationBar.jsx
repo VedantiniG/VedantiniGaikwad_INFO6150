@@ -8,10 +8,18 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Menu } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../actions/auth';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default (props) => {
 
+  let navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector(state => state.auth);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -21,11 +29,19 @@ export default (props) => {
     setAnchorEl(null);
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("type");
-    window.location = '/';
+  const handleLogout = () => {
+    dispatch(logout())
+      .then( () => {
+        navigate("/");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+  if(!isLoggedIn) {
+    return <Navigate to="/"/>;
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -75,7 +91,7 @@ export default (props) => {
           </Typography>
           <Button 
             color="inherit"
-            onClick={() => logout()}
+            onClick={handleLogout}
           >
             Logout
           </Button>
